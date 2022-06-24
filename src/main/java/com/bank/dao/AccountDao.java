@@ -1,33 +1,33 @@
-package com.dao;
+package com.bank.dao;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.user.User;
+import com.bank.models.Account;
 
-public class UserDao implements Dao<User> {
+public class AccountDao implements Dao<Account>{
 
-	public Optional<User> get(long id) {
+	public Optional<Account> get(long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public List<User> getAll() {
+	public List<Account> getAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void save(User t) {
+	public void save(Account t) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void update(User t, String[] params) {
+	public void update(Account t, String[] params) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void delete(User t) {
+	public void delete(Account t) {
 		// TODO Auto-generated method stub
 		
 	}

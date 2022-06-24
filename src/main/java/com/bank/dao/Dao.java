@@ -1,10 +1,12 @@
-package com.dao;
+package com.bank.dao;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface Dao<T> {
     Optional<T> get(long id);
+    
+    Optional<T> get(String username);
     
     List<T> getAll();
     

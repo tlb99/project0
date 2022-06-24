@@ -1,9 +1,9 @@
-package com.dao;
+package com.bank.dao;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.Application.Application;
+import com.bank.models.Application;
 
 public class ApplicationDao implements Dao<Application> {
 
@@ -31,6 +31,5 @@ public class ApplicationDao implements Dao<Application> {
 		// TODO Auto-generated method stub
 		
 	}
-
 
 }
