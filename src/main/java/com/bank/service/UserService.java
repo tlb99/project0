@@ -1,6 +1,6 @@
 package com.bank.service;
 
-import com.bank.dao.Dao;
+import com.bank.dao.UserDaoImpl;
 import com.bank.dao.UserDao;
 import com.bank.exceptions.RegisterUserFailedException;
 import com.bank.models.User;
@@ -8,8 +8,18 @@ import com.bank.models.User;
 public class UserService {
 	
 	// Dependency Injection
-	private Dao udao = new UserDao();
+	private UserDao udao = new UserDaoImpl();
 	
+	public UserDao getUdao() {
+		return udao;
+	}
+
+
+	public void setUdao(UserDao udao) {
+		this.udao = udao;
+	}
+
+
 	public User register(User u) {
 		
 		System.out.println("Registering user....");
@@ -23,7 +33,7 @@ public class UserService {
 		
 		// If the id is 0, we can call the dao to create a new object
 		
-		int generatedId = udao.save(u);
+		int generatedId = udao.insert(u);
 		
 		// Let's do some checking before finishing
 		
@@ -44,7 +54,7 @@ public class UserService {
 		
 		// We now need to call upon our userDAO to get us some information about the user with this specific username
 		
-		User returnedUser = udao.get(username);
+		User returnedUser = udao.findByUsername(username);
 		
 		
 		

@@ -6,13 +6,13 @@ import java.util.Scanner;
 import org.apache.log4j.Logger;
 
 import com.bank.dao.AccountDao;
-import com.bank.dao.Dao;
+import com.bank.dao.AccountDaoImpl;
 import com.bank.models.Account;
 
 public class AccountService {
 	
 	// Inject our DAO to the service
-	private Dao aDao = new AccountDao();
+	private AccountDao aDao = new AccountDaoImpl();
 	
 	// Lets make a logger here
 	Logger logger = Logger.getLogger(AccountService.class);
@@ -27,7 +27,7 @@ public class AccountService {
 		
 		// Lets call upon our DAO to get all of our accounts
 		
-		List<Account> accList = aDao.getAll();
+		List<Account> accList = aDao.findAll();
 		
 		for (Account a: accList) {
 			System.out.println(a);

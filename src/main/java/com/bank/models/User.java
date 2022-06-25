@@ -17,13 +17,26 @@ public class User implements Serializable{
 		super();
 		accounts = new ArrayList<Account>();
 	}
-	public User(String username, String password, Role role, int id) {
+	
+	public User( int id, String username, String password, Role role, List<Account> accounts){
+		this();
+		setId(id);
+		setUsername(username);
+		setPassword(password);
+		setRole(role);
+		setAccounts(accounts);
+	}
+	
+	
+	public User(String username, String password, Role role, List<Account> accounts){
 		this();
 		setUsername(username);
 		setPassword(password);
-		setId(id);
 		setRole(role);
+		setAccounts(accounts);
 	}
+	
+	
 	public String getUsername() {
 		return username;
 	}
