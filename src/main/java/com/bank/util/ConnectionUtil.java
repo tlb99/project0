@@ -3,6 +3,8 @@ package com.bank.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
+
 
 // We're going to make a Singleton Connection class
 public class ConnectionUtil {
@@ -29,12 +31,10 @@ public class ConnectionUtil {
 				return conn;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
 		
-		// A final even more secure method
 		String url = System.getenv("DB_URL");
 		String username = System.getenv("DB_USERNAME");
 		String password = System.getenv("DB_PASSWORD");
