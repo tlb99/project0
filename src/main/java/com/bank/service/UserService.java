@@ -5,10 +5,17 @@ import com.bank.dao.UserDao;
 import com.bank.exceptions.RegisterUserFailedException;
 import com.bank.models.User;
 
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
+
 public class UserService {
 	
 	// Dependency Injection
 	private UserDao udao = new UserDaoImpl();
+	
+	Logger logger = Logger.getLogger(UserService.class);
 	
 	public UserDao getUdao() {
 		return udao;
@@ -22,7 +29,7 @@ public class UserService {
 
 	public User register(User u) {
 		
-		System.out.println("Registering user....");
+		logger.info("Registering user....");
 		
 		// Let's make sure the registering user has an id of 0 before trying to register
 		// This is just an additional layer of data validation
@@ -43,7 +50,7 @@ public class UserService {
 			throw new RegisterUserFailedException("User's Id was either -1 or did not change after insertion");
 		}
 		
-		System.out.println("Successfully registered user with the Id of " + u.getId());
+		logger.info("Successfully registered user with the Id of " + u.getId());
 		
 		
 		return u;
@@ -63,14 +70,24 @@ public class UserService {
 		
 		if (returnedUser.getPassword().equals(password)) {
 			
-			System.out.println("Successfully Logged in!");
+			logger.info("Successfully Logged in!");
 			
-			System.out.println("Reached the inside of the if statement");
+			logger.info("Reached the inside of the if statement");
 			return returnedUser;
 		}
 		
 		// Otherwise the password is not equal
 		return null;
+	}
+	
+	public void viewAllUsers() {
+		logger.info("Fetching Users...");
+		
+		List<User> userList = udao.findAll();
+		
+		for (User u: userList) {
+			System.out.println(u);
+		}
 	}
 
 }

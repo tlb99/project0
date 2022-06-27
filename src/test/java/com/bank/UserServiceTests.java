@@ -110,11 +110,8 @@ public class UserServiceTests {
 		// This should return an exception
 		User registeredUser = us.register(dummyUser);
 
-		
 	}
 	
-	// Our code coverage was below the expected 80% threshold
-	// Let's test more methods to make sure we get there
 	@Test
 	public void testLoginReturnsUser() {
 		

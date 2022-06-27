@@ -5,13 +5,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.LinkedList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import com.bank.models.Role;
 import com.bank.models.User;
+import com.bank.service.UserService;
 import com.bank.util.ConnectionUtil;
 
 public class UserDaoImpl implements UserDao{
+	
+	Logger logger = Logger.getLogger(UserDaoImpl.class); 
 
 	public int insert(User u) {
 		// Let's use insert to practice creating a SQL operation
@@ -56,7 +62,7 @@ public class UserDaoImpl implements UserDao{
 				
 				int id = rs.getInt(1); 
 				
-				System.out.println("We returned a user with id #" + id);
+				logger.info("We returned a user with id #" + id);
 				
 				return id;
 			}
@@ -65,7 +71,7 @@ public class UserDaoImpl implements UserDao{
 			
 			
 		} catch (SQLException e) {
-			System.out.println("Unable to insert user - sql exception");
+			logger.info("Unable to insert user - sql exception");
 			e.printStackTrace();
 		}
 		
@@ -75,8 +81,44 @@ public class UserDaoImpl implements UserDao{
 	}
 
 	public User findById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		// Let's instantiate a user to hold our retrieved user
+		
+		User u = new User();
+		
+		// Try with Resources to connect and work with database
+		
+		try (Connection conn = ConnectionUtil.getConnection()){
+			
+			String sql = "SELECT * FROM users WHERE id = ?";
+			
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			
+			stmt.setInt(1, id);
+			
+			ResultSet rs;
+			
+			if ((rs = stmt.executeQuery()) != null) {
+				
+				// Move the cursor forward
+				rs.next();
+				
+				String returnedUsername = rs.getString("username");
+				String password = rs.getString("pwd");
+				Role role = Role.valueOf(rs.getString("user_role"));
+				
+				u.setId(id);
+				u.setUsername(returnedUsername);
+				u.setPassword(password);
+				u.setRole(role);
+				
+			} 
+		} catch (SQLException e) {
+			logger.info("SQL Exception Thrown - can't retrieve user from DB");
+			e.printStackTrace();
+		}
+		
+		
+		return u;
 	}
 
 	public User findByUsername(String username) {
@@ -114,7 +156,7 @@ public class UserDaoImpl implements UserDao{
 				
 			} 
 		} catch (SQLException e) {
-			System.out.println("SQL Exception Thrown - can't retrieve user from DB");
+			logger.info("SQL Exception Thrown - can't retrieve user from DB");
 			e.printStackTrace();
 		}
 		
@@ -123,17 +165,103 @@ public class UserDaoImpl implements UserDao{
 	}
 
 	public List<User> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		// Let's instantiate a list to hold our retrieved users
+		
+		List<User> users = new LinkedList<User>();
+		
+		// Try with Resources to connect and work with database
+		
+		try (Connection conn = ConnectionUtil.getConnection()){
+			
+			String sql = "SELECT * FROM users";
+			
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			
+			ResultSet rs;
+			
+			if ((rs = stmt.executeQuery()) != null) {
+				
+				// Keep moving the cursor forward
+				while(rs.next()) {
+					User u = new User();
+					
+					int id = rs.getInt("id");
+					String returnedUsername = rs.getString("username");
+					String password = rs.getString("pwd");
+					Role role = Role.valueOf(rs.getString("user_role"));
+					
+					u.setId(id);
+					u.setUsername(returnedUsername);
+					u.setPassword(password);
+					u.setRole(role);
+					
+					users.add(u);
+				}
+				
+			} 
+		} catch (SQLException e) {
+			logger.info("SQL Exception Thrown - can't retrieve users from DB");
+			e.printStackTrace();
+		}
+		
+		
+		return users;
 	}
 
 	public boolean update(User u) {
-		// TODO Auto-generated method stub
+		try (Connection conn = ConnectionUtil.getConnection()){
+			
+			String sql = "UPDATE users SET username = ?, password = ?, role = ? WHERE id = ?";
+			
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			
+			stmt.setString(1, u.getUsername());
+			stmt.setString(2, u.getPassword());
+			stmt.setObject(3, u.getRole(), Types.OTHER);
+			stmt.setInt(4, u.getId());
+			
+			ResultSet rs;
+			
+			if ((rs = stmt.executeQuery()) != null) {
+				
+				// Move the cursor forward
+				rs.next();
+				
+				return true;
+				
+			} 
+		} catch (SQLException e) {
+			logger.info("SQL Exception Thrown - can't update user in DB");
+			e.printStackTrace();
+		}
+		
 		return false;
 	}
 
 	public boolean delete(int id) {
-		// TODO Auto-generated method stub
+		try (Connection conn = ConnectionUtil.getConnection()){
+			
+			String sql = "DELETE FROM users WHERE id = ?";
+			
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			
+			stmt.setInt(1, id);
+			
+			ResultSet rs;
+			
+			if ((rs = stmt.executeQuery()) != null) {
+				
+				// Move the cursor forward
+				rs.next();
+				
+				return true;
+				
+			} 
+		} catch (SQLException e) {
+			logger.info("SQL Exception Thrown - can't delete user from DB");
+			e.printStackTrace();
+		}
+		
 		return false;
 	}
 
