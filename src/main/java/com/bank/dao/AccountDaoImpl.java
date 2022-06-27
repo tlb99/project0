@@ -165,7 +165,7 @@ public class AccountDaoImpl implements AccountDao{
 			stmt.setInt(1, accOwnerId);
 			
 			// We'll return all of the data queried so we need a ResultSet obj to iterate over it
-			ResultSet rs = stmt.executeQuery(sql);
+			ResultSet rs = stmt.executeQuery();
 			
 			// Open a while loop to get all the info
 			while (rs.next()) {

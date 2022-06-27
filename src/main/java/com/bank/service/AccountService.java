@@ -6,6 +6,8 @@ import org.apache.log4j.Logger;
 
 import com.bank.dao.AccountDao;
 import com.bank.dao.AccountDaoImpl;
+import com.bank.exceptions.RegisterAccountFailedException;
+import com.bank.exceptions.RegisterUserFailedException;
 import com.bank.models.Account;
 
 public class AccountService {
@@ -15,6 +17,35 @@ public class AccountService {
 	
 	// Lets make a logger here
 	Logger logger = Logger.getLogger(AccountService.class);
+	
+	public Account register(Account a) {
+		
+		logger.info("Registering account....");
+		
+		// Let's make sure the registering user has an id of 0 before trying to register
+		// This is just an additional layer of data validation
+		
+		if (a.getId()!= 0) {
+			throw new RegisterAccountFailedException("Could not register account because ID was not 0");
+		}
+		
+		// If the id is 0, we can call the dao to create a new object
+		
+		int generatedId = aDao.insert(a);
+		
+		// Let's do some checking before finishing
+		
+		if (generatedId != -1 && generatedId != a.getId()) {
+			a.setId(generatedId);
+		} else {
+			throw new RegisterUserFailedException("User's Id was either -1 or did not change after insertion");
+		}
+		
+		logger.info("Successfully registered account with an ID of " + a.getId());
+		
+		
+		return a;
+	}
 	
 	public void viewAllAccounts() {
 		logger.info("Fetching Accounts...");
@@ -26,6 +57,23 @@ public class AccountService {
 		for (Account a: accList) {
 			System.out.println(a);
 		}
+	}
+	
+	public List<Account> returnAccountsByOwnerId(int id) {
+		logger.info("Fetching Accounts...");
+		
+		// Lets call upon our DAO to get all of our accounts
+		
+		List<Account> accList = aDao.findByOwner(id);
+		
+		if(accList == null) {
+			logger.info("Failed to retrieve accounts from DB!");
+		}
+		else {
+			logger.info("Successfully retrieved accounts for user #" + id);
+		}
+		
+		return accList;
 	}
 
 }

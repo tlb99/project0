@@ -2,7 +2,7 @@ package com;
 
 import java.util.Scanner;
 
-import com.bank.printer.MenuPrinter;
+import com.bank.printer.Menu;
 import com.bank.models.Role;
 import com.bank.models.User;
 import com.bank.service.AccountService;
@@ -26,6 +26,7 @@ public class App {
 	public static void run() {
 		
 		UserService us = new UserService();
+		AccountService as = new AccountService();
 		
 		System.out.println("Welcome to our Bank!");
 				
@@ -48,11 +49,8 @@ public class App {
 				
 				System.out.println("Welcome to your account: " + loggedInUser.getUsername());
 				
-				// Maybe some data validation
-				
-				// Maybe creating a basic menu for your accounts
-				
-				// Giving option for accounts etc.
+				Menu menu = new Menu(loggedInUser, us, as, scan);
+				menu.start();
 				
 				
 			} else if (input == 2) {
