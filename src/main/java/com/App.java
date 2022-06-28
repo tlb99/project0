@@ -13,14 +13,7 @@ public class App {
 	static Scanner scan = new Scanner(System.in);
 	
 	public static void main(String[] args) {
-		//Let's just fetch our accounts to test
-		
-		AccountService as = new AccountService();
-		as.viewAllAccounts();
-		
 		run();
-		
-		
 	}
 	
 	public static void run() {
@@ -80,6 +73,7 @@ public class App {
 				us.register(u);
 			}
 			else if (input == 3) {
+				System.out.println("Exiting...");
 				return;
 			}
 		}

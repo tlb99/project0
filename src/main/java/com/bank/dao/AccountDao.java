@@ -1,6 +1,7 @@
 package com.bank.dao;
 
 import java.util.List;
+import java.util.Queue;
 
 import com.bank.models.Account;
 
@@ -25,5 +26,7 @@ public interface AccountDao {
 	// Delete
 	
 	boolean delete(Account a);
+	
+	Queue<Account> findByIsActive();
 
 }

@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import org.apache.log4j.Logger;
 
@@ -196,7 +197,7 @@ public class AccountDaoImpl implements AccountDao{
 	public boolean update(Account a) {
 		try (Connection conn = ConnectionUtil.getConnection()){
 			
-			String sql = "UPDATE accounts SET balance = ?, acc_owner = ?, active = ? WHERE id = ?";
+			String sql = "UPDATE accounts SET balance = ?, acc_owner = ?, active = ? WHERE id = ? RETURNING accounts.id";
 			
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			
@@ -226,7 +227,7 @@ public class AccountDaoImpl implements AccountDao{
 	public boolean delete(Account a) {
 		try (Connection conn = ConnectionUtil.getConnection()){
 			
-			String sql = "DELETE FROM accounts WHERE id = ?";
+			String sql = "DELETE FROM accounts WHERE id = ? RETURNING accounts.id";
 			
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			
@@ -248,6 +249,50 @@ public class AccountDaoImpl implements AccountDao{
 		}
 		
 		return false;
+	}
+
+	public Queue<Account> findByIsActive() {
+		// Instantiate a linkedlist to store all of the objects that we retrieve
+		Queue<Account> appQueue = new LinkedList<Account>();
+		
+		// Obtain a connection using try with resources
+		
+		try (Connection conn = ConnectionUtil.getConnection()){
+			
+			// Create a statement to execute against the DB
+			Statement stmt = conn.createStatement();
+			
+			// Let's create our SQL query
+			String sql = "SELECT * FROM accounts WHERE NOT active";
+			
+			// We'll return all of the data queried so we need a ResultSet obj to iterate over it
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			// Open a while loop to get all the info
+			while (rs.next()) {
+				
+				// Gather the id of the accounts, balance, accOwnerId, and isActive
+				int id = rs.getInt("id"); // Capture the value in the id column
+				double balance = rs.getDouble("balance");
+				int accOwnerId = rs.getInt("acc_owner");
+				boolean isActive = rs.getBoolean("active");
+				
+				// Let's create an Account object to store all of this
+				
+				Account a = new Account(id, balance, accOwnerId, isActive);
+				
+				appQueue.add(a);
+				
+			}
+			
+			
+		} catch (SQLException e) {
+			System.out.println("Unable to retrieve applications due to SQL Exception");
+			e.printStackTrace();
+		}
+		
+		
+		return appQueue;
 	}
 
 }

@@ -90,4 +90,12 @@ public class UserService {
 		}
 	}
 
+	public void viewUser(int id) {
+		logger.info("Fetching User + " + id + "...");
+		
+		User u = udao.findById(id);
+		
+		System.out.println(u);
+	}
+	
 }

@@ -1,6 +1,7 @@
 package com.bank.printer;
 
 import java.util.List;
+import java.util.Queue;
 import java.util.Scanner;
 
 import com.bank.models.Account;
@@ -65,16 +66,19 @@ public class Menu {
 		System.out.println("Welcome to the employee menu!");
 		
 		while(true) {
-			System.out.println("Press 1 to list all customers. \nPress 2 to list customer info by id. \nPress 3 to list account applications. \nPress 4 to log out.");
+			System.out.println("Press 1 to list all users. \nPress 2 to list user info by id. \nPress 3 to start the application review queue. \nPress 4 to log out.");
 			int input = scan.nextInt();
 			
 			switch(input) 
 			{
 				case 1:
-					listAllCustomers();
+					listAllUsers();
 					break;
 				case 2:
-					applyForAccount();
+					viewUserInfo();
+					break;
+				case 3:
+					startApplicationQueue();
 					break;
 				case 4:
 					return;
@@ -94,9 +98,17 @@ public class Menu {
 		System.out.println("Applied for account with ID " + new_a.getId());
 	}
 	
-	private void listAllCustomers() {
+	private void listAllUsers() {
 		us.viewAllUsers();
 	}
+	
+	private void viewUserInfo() {
+		System.out.println("Please enter the user id.");
+		int input = scan.nextInt();
+		
+		us.viewUser(input);
+	}
+	
 	
 	private void listAccounts(User user) {
 		int id = user.getId();
@@ -113,5 +125,47 @@ public class Menu {
 				System.out.println(acc.toString());
 			}
 		}	
+	}
+	
+	private void startApplicationQueue() {
+		// Accounts with a false isActive field are considered to be applications
+		Queue<Account> appQueue = as.returnApplications();
+		
+		// Return if there are no applications to view
+		if(appQueue == null || appQueue.isEmpty()) {
+			System.out.println("There are no applications in the queue.");
+			return;
+		}
+		
+		// Iterate through applications
+		int input = 0;
+		
+		System.out.println("Displaying account applications... ");
+		
+		while(!appQueue.isEmpty()) {
+			Account a = appQueue.poll();
+			System.out.println("Approve the following account?");
+			System.out.println(a);
+			System.out.println("Press 1 to approve account application. \nPress 2 to deny account application. \nPress 3 to quit the application review queue.");
+			
+			input = scan.nextInt();
+			
+			switch(input) 
+			{
+				case 1:
+					System.out.println("Approved application!");
+					as.approveAccount(a);
+					break;
+				case 2:
+					System.out.println("Denied application!");
+					as.denyAccount(a);
+					break;
+				case 3:
+					System.out.println("Exiting application review queue...");
+					return;
+			}
+			
+		} 
+		
 	}
 }

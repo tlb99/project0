@@ -1,6 +1,7 @@
 package com.bank.service;
 
 import java.util.List;
+import java.util.Queue;
 
 import org.apache.log4j.Logger;
 
@@ -74,6 +75,53 @@ public class AccountService {
 		}
 		
 		return accList;
+	}
+	
+	public Queue<Account> returnApplications() {
+		logger.info("Fetching Applications...");
+		
+		Queue<Account> appQueue = aDao.findByIsActive();
+		
+		if(appQueue == null) {
+			logger.info("Failed to retrieve applications from DB!");
+		}
+		else {
+			logger.info("Successfully retrieved applications");
+		}
+		
+		return appQueue;
+	}
+	
+	public boolean approveAccount(Account a) {
+		logger.info("Approving account...");
+		
+		a.setActive(true);
+		
+		boolean b = aDao.update(a);
+		
+		if(b) {
+			logger.info("Successfully approved application!");
+		}
+		else {
+			logger.info("Failed to approve application in DB!");
+		}
+		
+		return b;
+	}
+	
+	public boolean denyAccount(Account a) {
+		logger.info("Denying account...");
+		
+		boolean b = aDao.delete(a);
+		
+		if(b) {
+			logger.info("Successfully denied application!");
+		}
+		else {
+			logger.info("Failed to delete application from DB!");
+		}
+		
+		return b;
 	}
 
 }
