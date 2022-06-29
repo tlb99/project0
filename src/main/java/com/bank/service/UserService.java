@@ -14,19 +14,9 @@ import org.apache.log4j.Logger;
 public class UserService {
 	
 	// Dependency Injection
-	private UserDao udao = new UserDaoImpl();
+	public UserDao udao = new UserDaoImpl();
 	
 	Logger logger = Logger.getLogger(UserService.class);
-	
-	public UserDao getUdao() {
-		return udao;
-	}
-
-
-	public void setUdao(UserDao udao) {
-		this.udao = udao;
-	}
-
 
 	public User register(User u) {
 		

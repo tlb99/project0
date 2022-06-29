@@ -16,7 +16,7 @@ public class User implements Serializable{
 		super();
 	}
 	
-	public User( int id, String username, String password, Role role, List<Account> accounts){
+	public User( int id, String username, String password, Role role){
 		this();
 		setId(id);
 		setUsername(username);

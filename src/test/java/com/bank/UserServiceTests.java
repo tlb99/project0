@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import com.bank.dao.UserDao;
 import com.bank.exceptions.RegisterUserFailedException;
+import com.bank.exceptions.UserNotFoundException;
 import com.bank.models.Account;
 import com.bank.models.Role;
 import com.bank.models.User;
@@ -39,7 +40,7 @@ public class UserServiceTests {
 		mockDao = mock(UserDao.class);
 		
 		// Let's set the user dao inside of the userservice to this mocked one
-		us.setUdao(mockDao);
+		us.udao = mockDao;
 		
 		// Let's also set up a stub user for passing in and stuff
 		dummyUser = new User();
@@ -63,7 +64,7 @@ public class UserServiceTests {
 	@Test
 	public void testRegisterUserReturnsNewPKId() {
 		// Let's make a user object to test
-		dummyUser = new User(0, "spongebob", "pass", Role.Admin, new LinkedList<Account>());
+		dummyUser = new User(0, "spongebob", "pass", Role.Admin);
 		
 		// Let's generate a random number to pretend the DB created it
 		Random r = new Random();
@@ -112,11 +113,22 @@ public class UserServiceTests {
 
 	}
 	
+	@Test(expected = UserNotFoundException.class)
+	public void testLoggingInAsNonExistentUserThrowsException() {
+		
+		// Mock find by username method
+		when(mockDao.findByUsername("customer")).thenThrow(UserNotFoundException.class);
+		
+		// Should throw an exception
+		us.login("customer", "pwd");
+	}
+	
+	
 	@Test
 	public void testLoginReturnsUser() {
 		
 		// Let's set up a dummy to test our login
-		dummyUser = new User(0, "spongebob", "pass", Role.Admin, new LinkedList<Account>());
+		dummyUser = new User(0, "spongebob", "pass", Role.Admin);
 		
 		// Let's create our login attempt
 		String username = "spongebob";
@@ -127,6 +139,18 @@ public class UserServiceTests {
 		User loggedIn = us.login(username, password);
 		
 		assertEquals(loggedIn.getUsername(), username);
+		
+	}
+	
+	
+	@Test
+	public void testViewUserReturnsUser() {
+		
+		// Let's set up a dummy to test our login
+		dummyUser = new User(0, "spongebob", "pass", Role.Admin);
+		when(mockDao.findById(0)).thenReturn(dummyUser);
+		
+		assertEquals(us.viewUser(0), dummyUser);
 		
 		
 	}

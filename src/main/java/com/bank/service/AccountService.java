@@ -14,8 +14,8 @@ import com.bank.models.Account;
 public class AccountService {
 	
 	// Inject our DAO to the service
-	private AccountDao aDao = new AccountDaoImpl();
-	
+	public AccountDao aDao = new AccountDaoImpl();
+
 	// Lets make a logger here
 	Logger logger = Logger.getLogger(AccountService.class);
 	
@@ -23,7 +23,7 @@ public class AccountService {
 		
 		logger.info("Registering account....");
 		
-		// Let's make sure the registering user has an id of 0 before trying to register
+		// Let's make sure the registering account has an id of 0 before trying to register
 		// This is just an additional layer of data validation
 		
 		if (a.getId()!= 0) {
@@ -39,7 +39,7 @@ public class AccountService {
 		if (generatedId != -1 && generatedId != a.getId()) {
 			a.setId(generatedId);
 		} else {
-			throw new RegisterUserFailedException("User's Id was either -1 or did not change after insertion");
+			throw new RegisterAccountFailedException("Account Id was either -1 or did not change after insertion");
 		}
 		
 		logger.info("Successfully registered account with an ID of " + a.getId());
