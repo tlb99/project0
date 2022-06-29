@@ -48,6 +48,10 @@ public class AccountService {
 		return a;
 	}
 	
+	public Account getAccountByID(int accId) {
+		return aDao.findById(accId);
+	}
+	
 	public void viewAllAccounts() {
 		logger.info("Fetching Accounts...");
 		
@@ -92,30 +96,30 @@ public class AccountService {
 		return appQueue;
 	}
 	
-	public boolean approveAccount(Account a) {
-		logger.info("Approving account...");
+	public boolean updateAccount(Account a) {
+		logger.info("Updating account...");
 		
 		a.setActive(true);
 		
 		boolean b = aDao.update(a);
 		
 		if(b) {
-			logger.info("Successfully approved application!");
+			logger.info("Successfully updated application!");
 		}
 		else {
-			logger.info("Failed to approve application in DB!");
+			logger.info("Failed to update application in DB!");
 		}
 		
 		return b;
 	}
 	
-	public boolean denyAccount(Account a) {
-		logger.info("Denying account...");
+	public boolean deleteAccount(Account a) {
+		logger.info("Deleted account...");
 		
 		boolean b = aDao.delete(a);
 		
 		if(b) {
-			logger.info("Successfully denied application!");
+			logger.info("Successfully deleted application!");
 		}
 		else {
 			logger.info("Failed to delete application from DB!");

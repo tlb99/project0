@@ -3,6 +3,7 @@ package com.bank.service;
 import com.bank.dao.UserDaoImpl;
 import com.bank.dao.UserDao;
 import com.bank.exceptions.RegisterUserFailedException;
+import com.bank.exceptions.UserNotFoundException;
 import com.bank.models.User;
 
 import java.util.List;
@@ -60,10 +61,9 @@ public class UserService {
 	public User login(String username, String password) {
 		
 		// We now need to call upon our userDAO to get us some information about the user with this specific username
+		try {
 		
 		User returnedUser = udao.findByUsername(username);
-		
-		
 		
 		
 		// Check to see if returned password matches the entered password
@@ -76,7 +76,11 @@ public class UserService {
 			return returnedUser;
 		}
 		
-		// Otherwise the password is not equal
+		}
+		catch(UserNotFoundException e) {
+			throw e;
+		}
+		
 		return null;
 	}
 	
@@ -90,12 +94,14 @@ public class UserService {
 		}
 	}
 
-	public void viewUser(int id) {
+	public User viewUser(int id) {
 		logger.info("Fetching User + " + id + "...");
 		
 		User u = udao.findById(id);
 		
 		System.out.println(u);
+		
+		return u;
 	}
 	
 }

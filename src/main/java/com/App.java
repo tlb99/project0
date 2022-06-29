@@ -3,6 +3,7 @@ package com;
 import java.util.Scanner;
 
 import com.bank.printer.Menu;
+import com.bank.exceptions.UserNotFoundException;
 import com.bank.models.Role;
 import com.bank.models.User;
 import com.bank.service.AccountService;
@@ -38,12 +39,17 @@ public class App {
 				
 				String password = scan.next();
 				
-				User loggedInUser = us.login(username, password);
-				
-				System.out.println("Welcome to your account: " + loggedInUser.getUsername());
-				
-				Menu menu = new Menu(loggedInUser, us, as, scan);
-				menu.start();
+				try {
+					User loggedInUser = us.login(username, password);
+					System.out.println("Welcome to your account: " + loggedInUser.getUsername());
+					
+					Menu menu = new Menu(loggedInUser, us, as, scan);
+					menu.start();
+				}
+				catch(UserNotFoundException e) {
+					System.out.println("Could not find user, please try again.");
+					continue;
+				}
 				
 				
 			} else if (input == 2) {
@@ -61,13 +67,13 @@ public class App {
 				switch(input) 
 				{
 					case 1:
-						u = new User(username, password, Role.Customer, null);
+						u = new User(username, password, Role.Customer);
 						break;
 					case 2:
-						u = new User(username, password, Role.Employee, null);
+						u = new User(username, password, Role.Employee);
 						break;
 					default:
-						u = new User(username, password, Role.Admin, null);
+						u = new User(username, password, Role.Admin);
 				}
 				
 				us.register(u);

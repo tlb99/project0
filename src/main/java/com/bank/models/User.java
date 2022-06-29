@@ -11,11 +11,9 @@ public class User implements Serializable{
 	private int id;
 	private Role role;
 	
-	private List<Account> accounts;
 	
 	public User() {
 		super();
-		accounts = new ArrayList<Account>();
 	}
 	
 	public User( int id, String username, String password, Role role, List<Account> accounts){
@@ -24,16 +22,14 @@ public class User implements Serializable{
 		setUsername(username);
 		setPassword(password);
 		setRole(role);
-		setAccounts(accounts);
 	}
 	
 	
-	public User(String username, String password, Role role, List<Account> accounts){
+	public User(String username, String password, Role role){
 		this();
 		setUsername(username);
 		setPassword(password);
 		setRole(role);
-		setAccounts(accounts);
 	}
 	
 	
@@ -61,17 +57,10 @@ public class User implements Serializable{
 	public void setRole(Role role) {
 		this.role = role;
 	}	
-	public List<Account> getAccounts() {
-		return accounts;
-	}
-	public void setAccounts(List<Account> accounts) {
-		this.accounts = accounts;
-	}
 	
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + ", accounts="
-				+ accounts + "]";
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", role=" + role + "]";
 	}
 	
 	@Override
@@ -83,11 +72,6 @@ public class User implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (accounts == null) {
-			if (other.accounts != null)
-				return false;
-		} else if (!accounts.equals(other.accounts))
-			return false;
 		if (id != other.id)
 			return false;
 		if (password == null) {
@@ -109,7 +93,6 @@ public class User implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((accounts == null) ? 0 : accounts.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((role == null) ? 0 : role.hashCode());

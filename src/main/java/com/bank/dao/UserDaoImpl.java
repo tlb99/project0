@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.bank.exceptions.UserNotFoundException;
 import com.bank.models.Role;
 import com.bank.models.User;
 import com.bank.service.UserService;
@@ -157,7 +158,7 @@ public class UserDaoImpl implements UserDao{
 			} 
 		} catch (SQLException e) {
 			logger.info("SQL Exception Thrown - can't retrieve user from DB");
-			e.printStackTrace();
+			throw new UserNotFoundException("User not found");
 		}
 		
 		

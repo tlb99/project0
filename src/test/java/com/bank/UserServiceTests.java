@@ -43,7 +43,7 @@ public class UserServiceTests {
 		
 		// Let's also set up a stub user for passing in and stuff
 		dummyUser = new User();
-		dummyUser.setAccounts(new LinkedList<Account>());
+		//dummyUser.setAccounts(new LinkedList<Account>());
 		dummyUser.setId(0); // We're doing to emulate a user generated from the console
 	}
 	
@@ -99,7 +99,7 @@ public class UserServiceTests {
 	public void testInsertedUserReturnedNegativeOne() {
 		
 		// Dummy user we're passing to the insert method
-		dummyUser = new User(0, "spongebob", "pass", Role.Admin, new LinkedList<Account>());
+		dummyUser = new User("spongebob", "pass", Role.Admin);
 		
 		// Returning this value from the insert method to cause an exception
 		int fakePK = -1;

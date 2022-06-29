@@ -3,11 +3,14 @@ package com.bank.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
+
+import org.apache.log4j.Logger;
+
 
 
 // We're going to make a Singleton Connection class
 public class ConnectionUtil {
+	static Logger logger = Logger.getLogger(ConnectionUtil.class); 
 	
 	// Private static instance
 	
@@ -27,7 +30,7 @@ public class ConnectionUtil {
 		
 		try {
 			if (conn != null && !conn.isClosed()) {
-				System.out.println("Using a previously made connection");
+				logger.info("Using a previously made connection");
 				return conn;
 			}
 		} catch (SQLException e) {
@@ -41,10 +44,10 @@ public class ConnectionUtil {
 		
 		try {
 			conn = DriverManager.getConnection(url, username, password);
-			System.out.println("Established Connection to Database!");
+			logger.info("Established Connection to Database!");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Cannot establish connection");
+			logger.info("Cannot establish connection");
 			e.printStackTrace();
 		}
 		
